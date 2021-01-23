@@ -37,4 +37,21 @@ class Handler extends ExceptionHandler
             //
         });
     }
+
+     /**
+     * Render an exception into an HTTP response.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \Throwable  $e
+     * @return \Symfony\Component\HttpFoundation\Response
+     *
+     * @throws \Throwable
+     */
+
+     public function render($request, Throwable $e){
+         return response([
+             'error' => $e->getMessage(),
+             'status' => $e->getCode() ? $e->getCode() : 400,
+         ]);
+     }
 }

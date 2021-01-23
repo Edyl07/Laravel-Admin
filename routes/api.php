@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ImageController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PermissionController;
@@ -26,6 +27,11 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::middleware(['auth:api'])->group(function () {
+
+    Route::post('logout', [AuthController::class, 'logout']);
+
+    Route::get('chart', [DashboardController::class, 'chart']);
+
     Route::get('user', [UserController::class, 'user']);
     Route::put('users/info', [UserController::class, 'updateInfo']);
     Route::put('users/password', [UserController::class, 'updatePassword']);

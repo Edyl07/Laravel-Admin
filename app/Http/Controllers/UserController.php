@@ -16,6 +16,15 @@ use Symfony\Component\HttpFoundation\Response;
 
 class UserController extends Controller
 {
+
+    /**
+     * @OA\Get(path="/users",
+     *  @OA\Response(response="200",
+     *      description="User Collection",
+     *  )
+     * )
+     */
+
     /**
      * Display a listing of the resource.
      *
@@ -24,7 +33,7 @@ class UserController extends Controller
     public function index()
     {
         Gate::authorize('view', 'users');
-        $users = User::paginate(4);
+        $users = User::paginate(20);
 
         return  UserResource::collection($users);
     }
@@ -47,6 +56,7 @@ class UserController extends Controller
      */
     public function store(UserCreateRequest $request)
     {
+        Gate::authorize('edit', 'users');
         $user = User::create($request->only('first_name', 'last_name', 'email', 'role_id') + [
             'password' => Hash::make(1234)
         ]);
@@ -61,6 +71,7 @@ class UserController extends Controller
      */
     public function show($id)
     {
+        Gate::authorize('view', 'users');
         $user = User::find($id);
         return new UserResource($user);
     }
@@ -85,6 +96,7 @@ class UserController extends Controller
      */
     public function update(UserUpdateRequest $request, $id)
     {
+        Gate::authorize('edit', 'users');
         $user = User::find($id);
         $user->update($request->only('first_name', 'last_name', 'email', 'role_id'));
 
@@ -99,6 +111,7 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
+        Gate::authorize('edit', 'users');
         User::destroy($id);
         return response(null, Response::HTTP_NO_CONTENT);
     }
